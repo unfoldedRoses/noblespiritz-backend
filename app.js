@@ -3,6 +3,8 @@ const app = express();
 const routes = require('./routes');
 const passport = require('passport');
 const { sequelize } = require('./models');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./swagger');
 const morgan =require('morgan')
 
 // Middleware
@@ -12,6 +14,8 @@ app.use(passport.initialize());
 // Routes
 app.use('/api', routes);
 app.use(morgan('tiny'))
+// Add the Swagger middleware
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Database connection
 sequelize
