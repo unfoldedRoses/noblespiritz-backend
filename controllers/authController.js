@@ -6,7 +6,7 @@ const userService = require('../services/userService');
 
 exports.register = async (req, res) => {
   try {
-    console.log(req.body)
+    console.log(req.body,">>>>>>>>>>>>>>")
     const { username,email, password, role_id, status } = req.body;
 
     // Check if user with the given email already exists
@@ -17,7 +17,7 @@ exports.register = async (req, res) => {
 
     // Create the user
     const user = await userService.createUser(username,email, password, role_id, status);
-console.log(user,">>>>>>>>>")
+    console.log(user,">>>>>>>>>")
     // Generate JWT token
     const token = jwt.sign({ id: user.id }, "praveen");
 

@@ -7,8 +7,15 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger');
 const morgan =require('morgan')
 const cookieParser=require('cookie-parser')
+const cors=require('cors');
+
+
+var corsOptions = {
+  origin: '*'
+}
 
 // Middleware
+app.use(cors(corsOptions))
 app.use(express.json());
 app.use(passport.initialize());
 
@@ -30,7 +37,7 @@ sequelize
   });
 
 // Start the server
-const PORT =  3000;
+const PORT =  3018;
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
