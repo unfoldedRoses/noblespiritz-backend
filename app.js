@@ -6,6 +6,7 @@ const { sequelize } = require('./models');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger');
 const morgan =require('morgan')
+const cookieParser=require('cookie-parser')
 
 // Middleware
 app.use(express.json());
@@ -16,6 +17,7 @@ app.use('/api', routes);
 app.use(morgan('tiny'))
 // Add the Swagger middleware
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(cookieParser());
 
 // Database connection
 sequelize

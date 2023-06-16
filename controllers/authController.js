@@ -6,8 +6,8 @@ const userService = require('../services/userService');
 
 exports.register = async (req, res) => {
   try {
-    console.log("reached")
-    const { email, password, roleId, status } = req.body;
+    console.log(req.body)
+    const { username,email, password, role_id, status } = req.body;
 
     // Check if user with the given email already exists
     const existingUser = await userService.getUserByEmail(email);
@@ -16,8 +16,8 @@ exports.register = async (req, res) => {
     }
 
     // Create the user
-    const user = await userService.createUser(email, password, roleId, status);
-
+    const user = await userService.createUser(username,email, password, role_id, status);
+console.log(user,">>>>>>>>>")
     // Generate JWT token
     const token = jwt.sign({ id: user.id }, "praveen");
 
@@ -45,16 +45,18 @@ exports.login = async (req, res) => {
     }
 
     // Generate JWT token
-    const token = jwt.sign({ id: user.id }, "praveen");
+    const token = jwt.sign({ id: user.id }, "praveen" , {expiresIn: "1d"});
 
 
-// // Generate and emit token
-// const token = jwt.sign({ userId: user.id, email: user.email, role: user.role.name }, "praveen", {
-//     expiresIn: '1h',
-//   });
+  // Get the user's role
+  const role = await userService.getRoleById(user.role_id);
   
+    res.cookie("token", token, {
+      httpOnly: true,
+      // secure: true, // only works on https
+    });
 
-    res.json({ accessToken:token,role:user });
+    res.json({ accessToken:token,role:role.name });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
