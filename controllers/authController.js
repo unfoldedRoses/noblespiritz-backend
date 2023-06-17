@@ -1,13 +1,39 @@
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
+const { Role } = require('../models');
 const userService = require('../services/userService');
 
-// const { "praveen" } = process.env;
+
+
+// exports.register = async (req, res) => {
+//   try {
+    
+//     const { username,email, password, role, status } = req.body;
+
+//     // Check if user with the given email already exists
+//     const existingUser = await userService.getUserByEmail(email);
+//     if (existingUser) {
+//       return res.status(409).json({ error: 'User with this email already exists' });
+//     }
+    
+//     // Create the user
+//     const user = await userService.createUser(username,email, password, role, status);
+   
+//     // Generate JWT token
+//     const token = jwt.sign({ id: user.id }, "praveen");
+
+//     res.json({ token });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// };
+
+
 
 exports.register = async (req, res) => {
   try {
-    console.log(req.body,">>>>>>>>>>>>>>")
-    const { username,email, password, role_id, status } = req.body;
+    const { username, email, password, role, status } = req.body;
 
     // Check if user with the given email already exists
     const existingUser = await userService.getUserByEmail(email);
@@ -15,9 +41,17 @@ exports.register = async (req, res) => {
       return res.status(409).json({ error: 'User with this email already exists' });
     }
 
+    // Get the role_id based on the role name
+    const roleRecord = await Role.findOne({ where: { name: role } });
+    if (!roleRecord) {
+      return res.status(400).json({ error: 'Invalid role specified' });
+    }
+
+  
+
     // Create the user
-    const user = await userService.createUser(username,email, password, role_id, status);
-    console.log(user,">>>>>>>>>")
+    const user = await userService.createUser(username, email, password, roleRecord.name, status);
+
     // Generate JWT token
     const token = jwt.sign({ id: user.id }, "praveen");
 
@@ -27,6 +61,11 @@ exports.register = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+exports.createUser = async (username, email, password, role, status) => {
+  return User.create({ username, email, password, role, status });
+};
+
 
 exports.login = async (req, res) => {
   try {
@@ -49,14 +88,14 @@ exports.login = async (req, res) => {
 
 
   // Get the user's role
-  const role = await userService.getRoleById(user.role_id);
+  const role = await Role.findOne({ where: { name: user.role } });
   
     res.cookie("token", token, {
       httpOnly: true,
       // secure: true, // only works on https
     });
 
-    res.json({ accessToken:token,role:role.name });
+    res.json({ accessToken:token,role:role });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

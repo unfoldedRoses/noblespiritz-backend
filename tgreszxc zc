@@ -1,0 +1,5 @@
+ id | username |     email     |                           password                           | status |  role   |       created_at        |       updated_at        
+----+----------+---------------+--------------------------------------------------------------+--------+---------+-------------------------+-------------------------
+  4 | praveen  | doe@gmail.com | $2b$10$XDQuge0ki4rZwAYkTVCIruj4Pq8SrNZ7xQZsdPbJi2x44UCWnhU5m | active | learner | 2023-06-17 09:22:21.767 | 2023-06-17 09:22:21.767
+(1 row)
+

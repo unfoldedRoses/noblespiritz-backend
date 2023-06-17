@@ -20,8 +20,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 'active',
     },
-    role_id: {
-      type: DataTypes.INTEGER,
+    role: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
   });
@@ -32,9 +32,7 @@ module.exports = (sequelize, DataTypes) => {
     user.password = hashedPassword;
   });
 
-  User.associate = (models) => {
-    User.belongsTo(models.Role, { foreignKey: 'role_id' });
-  };
+ 
 
   return User;
 };

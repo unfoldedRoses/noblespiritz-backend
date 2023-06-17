@@ -37,7 +37,7 @@ sequelize
   });
 
 // Start the server
-const PORT =  3018;
+const PORT =  3009;
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });

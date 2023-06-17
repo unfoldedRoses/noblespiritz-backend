@@ -15,7 +15,6 @@ const sequelize = new Sequelize("noblespirit", "postgres", "123456", {
 const Role = require('./role')(sequelize, Sequelize);
 const User = require('./user')(sequelize, Sequelize);
 
-User.belongsTo(Role);
-Role.hasMany(User);
+
 
 module.exports = { sequelize, Role, User };

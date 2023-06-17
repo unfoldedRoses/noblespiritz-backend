@@ -6,20 +6,34 @@ exports.getUserByEmail = async (email) => {
   return User.findOne({ where: { email } });
 };
 
-exports.createUser = async (username,email, password, role_id, status) => {
-  return User.create({ username,email, password, role_id, status });
+exports.createUser = async (username,email, password, role, status) => {
+  
+  return User.create({ username,email, password, role, status });
 };
 
 exports.checkPassword = async (password, hashedPassword) => {
   return bcrypt.compare(password, hashedPassword);
 };
 
-exports.getRoleById = async (roleId) => {
+// exports.getRoleById = async (roleId) => {
+//   try {
+//     console.log(roleId,">>>")
+//     return await Role.findByPk(roleId);
+//   } catch (error) {
+//     console.error(error);
+//     throw new Error('Failed to retrieve role by ID');
+//   }
+// };
+
+
+
+
+exports.getRole = async (criteria) => {
   try {
-    console.log(roleId,">>>")
-    return await Role.findByPk(roleId);
+    const role = await Role.findOne(criteria);
+    return role;
   } catch (error) {
-    console.error(error);
-    throw new Error('Failed to retrieve role by ID');
+    // Handle any errors that occur during role retrieval
+    throw new Error('Failed to retrieve role');
   }
 };
